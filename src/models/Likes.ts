@@ -1,4 +1,4 @@
-export class LikesDislikes {
+export class Likes {
     constructor (
     private userId: string,
     private postId: string,
