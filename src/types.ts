@@ -1,4 +1,4 @@
-export type TUsers = {
+export interface UsersDB {
     id: string,
     name: string,
     email: string,
@@ -7,7 +7,7 @@ export type TUsers = {
     created_at: string
 }
 
-export type TPosts = {
+export interface PostsDB {
     id: string,
     creator_id: string,
     content: string,
@@ -17,7 +17,7 @@ export type TPosts = {
     updated_at: string
 }
 
-export type TLikesDislikes = {
+export interface LikesDB {
     user_id: string,
     post_id: string,
     like: number
