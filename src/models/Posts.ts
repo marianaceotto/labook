@@ -1,12 +1,15 @@
+import { PostsDB, PostsModel } from "../types"
+
 export class Posts {
     constructor (
     private id: string,
-    private creatorId: string,
     private content: string,
     private likes: number,
     private dislikes: number,
     private createdAt: string,
-    private updatedAt: string
+    private updatedAt: string,
+    private creatorId: string,
+    private creatorName: string
     ) {}
 
     public getId(): string {
@@ -15,14 +18,6 @@ export class Posts {
 
     public setId(value: string): void {
         this.id = value
-    }
-
-    public getCreatorId(): string {
-        return this.creatorId
-    }
-
-    public setCreatorId(value: string): void {
-        this.creatorId = value
     }
 
     public getContent(): string {
@@ -41,12 +36,28 @@ export class Posts {
         this.likes = value
     }
 
+    public addLike() {
+        this.likes += 1
+    }
+
+    public removeLike() {
+        this.likes -= 1
+    }
+
     public getDislikes(): number {
         return this.dislikes
     }
 
     public setDislikes(value: number): void {
         this.dislikes = value
+    }
+
+    public addDislike() {
+        this.dislikes += 1
+    }
+
+    public removeDislike() {
+        this.dislikes -= 1
     }
 
     public getCreatedAt(): string {
@@ -63,5 +74,48 @@ export class Posts {
 
     public setUpdatedAt(value: string): void {
         this.updatedAt = value
+    }
+
+    public getCreatorId(): string {
+        return this.creatorId
+    }
+
+    public setCreatorId(value: string): void {
+        this.creatorId = value
+    }
+
+    public getCreatorName(): string {
+        return this.creatorName
+    }
+
+    public setCreatorName(value: string): void {
+        this.creatorName = value
+    }
+
+    public toDBModel(): PostsDB {
+        return {
+            id: this.id,
+            creator_id: this.creatorId,
+            content: this.content,
+            likes: this.likes,
+            dislikes: this.dislikes,
+            created_at: this.createdAt,
+            updated_at: this.updatedAt
+        }
+    }
+
+    public toBusinessModel(): PostsModel {
+        return {
+            id: this.id,
+            content: this.content,
+            likes: this.likes,
+            dislikes: this.dislikes,
+            createdAt: this.createdAt,
+            updatedAt: this.updatedAt,
+            creator: {
+                id: this.creatorId,
+                name: this.creatorName
+            }
+        }
     }
 }
