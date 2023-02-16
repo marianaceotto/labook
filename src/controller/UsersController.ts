@@ -1,7 +1,10 @@
 import { Request, Response } from "express";
+import { UserBusiness } from "../business/UsersBusiness";
 
 export class UsersController {
-
+    constructor(
+        private userBusiness: UserBusiness
+    ){}
     public getUsers = async (req: Request, res: Response) => {
         try {
             

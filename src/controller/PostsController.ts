@@ -1,7 +1,10 @@
 import { Request } from "express";
+import { PostsBusiness } from "../business/PostsBusiness";
 
 export class PostsController {
-    
+    constructor(
+        private postsBusiness: PostsBusiness
+    ){}
     public getPosts = async (req: Request, res: Response) => {
         try {
             
@@ -19,6 +22,10 @@ export class PostsController {
     }
 
     public deletePost = async (req: Request, res: Response) => {
+
+    }
+
+    public likeOrDislikePost = async (req: Request, res: Response) => {
 
     }
 }

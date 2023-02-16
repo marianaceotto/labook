@@ -2,34 +2,38 @@ import { BaseDatabase } from "./BaseDatabase"
 import { PostsDB } from "../types"
 
 export class PostsDatabase extends BaseDatabase{
-    public static TABLE_POSTS = "posts"
+    // public static TABLE_POSTS = "posts"
 
-    public async findPostByName(q: string | undefined){
-        let postsDB
+    // public async findUserByName(q: string | undefined) {
+    //     let postsDB
 
-        if (q) {
-            const result: PostsDB[] = await BaseDatabase
-                .connection(PostsDatabase.TABLE_POSTS)
-                .where("name", "LIKE", `%${q}%`)
-            postsDB = result
-        } else {
-            const result: PostsDB[] = await BaseDatabase
-                .connection(PostsDatabase.TABLE_POSTS)
-            postsDB = result    
-        }
-    }
+    //     if (q) {
+    //         const result: PostsDB[] = await BaseDatabase
+    //             .connection(PostsDatabase.TABLE_POSTS)
+    //             .where("name", "LIKE", `%${q}%`)
 
-    public async findPostById(id: string) {
-        const [ PostsDB ]: PostsDB[] | undefined[] = await BaseDatabase
-            .connection(PostsDatabase.TABLE_POSTS)
-            .where({ id })
+    //         postsDB = result
+    //     } else {
+    //         const result: PostsDB[] = await BaseDatabase
+    //             .connection(PostsDatabase.TABLE_POSTS)
 
-        return PostsDB
-    }
+    //         postsDB = result
+    //     }
 
-    public async insertPost(newPostDB: PostsDB) {
-        await BaseDatabase
-            .connection(PostsDatabase.TABLE_POSTS)
-            .insert(newPostDB)
-    }
+    //     return postsDB
+    // }
+
+    // public async findUserById(id: string) {
+    //     const [ PostsDB ]: PostsDB[] | undefined[] = await BaseDatabase
+    //         .connection(PostsDatabase.TABLE_POSTS)
+    //         .where({ id })
+
+    //     return PostsDB
+    // }
+
+    // public async insertUser(newPostsDB: PostsDB) {
+    //     await BaseDatabase
+    //         .connection(PostsDatabase.TABLE_POSTS)
+    //         .insert(newPostsDB)
+    // }
 }
