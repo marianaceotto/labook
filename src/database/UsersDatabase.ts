@@ -2,38 +2,21 @@ import { BaseDatabase } from "./BaseDatabase"
 import { UsersDB } from "../types"
 
 export class UsersDatabase extends BaseDatabase {
-    // public static TABLE_USERS = "users"
+    public static TABLE_USERS = "users"
 
-    // public async findUserByName(q: string | undefined) {
-    //     let usersDB
+    public findByEmail = async (email: string): Promise<UsersDB | undefined>  => {
+        const result: UsersDB[] = await BaseDatabase
+            .connection(UsersDatabase.TABLE_USERS)
+            .select()
+            .where({ email })
+        
+        return result[0]
+    }
 
-    //     if (q) {
-    //         const result: UsersDB[] = await BaseDatabase
-    //             .connection(UsersDatabase.TABLE_USERS)
-    //             .where("name", "LIKE", `%${q}%`)
 
-    //         usersDB = result
-    //     } else {
-    //         const result: UsersDB[] = await BaseDatabase
-    //             .connection(UsersDatabase.TABLE_USERS)
-
-    //         usersDB = result
-    //     }
-
-    //     return usersDB
-    // }
-
-    // public async findUserById(id: string) {
-    //     const [ UsersDB ]: UsersDB[] | undefined[] = await BaseDatabase
-    //         .connection(UsersDatabase.TABLE_USERS)
-    //         .where({ id })
-
-    //     return UsersDB
-    // }
-
-    // public async insertUser(newUsersDB: UsersDB) {
-    //     await BaseDatabase
-    //         .connection(UsersDatabase.TABLE_USERS)
-    //         .insert(newUsersDB)
-    // }
+    public async insert (userDB: UsersDB): Promise<void> {
+        await BaseDatabase
+            .connection(UsersDatabase.TABLE_USERS)
+            .insert(userDB)
+    }
 }

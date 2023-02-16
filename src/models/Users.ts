@@ -43,7 +43,7 @@ export class Users {
         this.password = value
     }
 
-    public getRole(): string {
+    public getRole(): USER_ROLES {
         return this.role
     }
 
