@@ -1,39 +1,39 @@
-import { UsersDB } from "../types";
-import { BaseDatabase } from "./BaseDatabase";
+import { BaseDatabase } from "./BaseDatabase"
+import { UsersDB } from "../types"
 
 export class UsersDatabase extends BaseDatabase {
-    public static TABLE_USERS = "users"
+    // public static TABLE_USERS = "users"
 
-    public async findUserByName(q: string | undefined) {
-        let usersDB
+    // public async findUserByName(q: string | undefined) {
+    //     let usersDB
 
-        if (q) {
-            const result: UsersDB[] = await BaseDatabase
-                .connection(UsersDatabase.TABLE_USERS)
-                .where("name", "LIKE", `%${q}%`)
+    //     if (q) {
+    //         const result: UsersDB[] = await BaseDatabase
+    //             .connection(UsersDatabase.TABLE_USERS)
+    //             .where("name", "LIKE", `%${q}%`)
 
-            usersDB = result
-        } else {
-            const result: UsersDB[] = await BaseDatabase
-                .connection(UsersDatabase.TABLE_USERS)
+    //         usersDB = result
+    //     } else {
+    //         const result: UsersDB[] = await BaseDatabase
+    //             .connection(UsersDatabase.TABLE_USERS)
 
-            usersDB = result
-        }
+    //         usersDB = result
+    //     }
 
-        return usersDB
-    }
+    //     return usersDB
+    // }
 
-    public async findUserById(id: string) {
-        const [ UsersDB ]: UsersDB[] | undefined[] = await BaseDatabase
-            .connection(UsersDatabase.TABLE_USERS)
-            .where({ id })
+    // public async findUserById(id: string) {
+    //     const [ UsersDB ]: UsersDB[] | undefined[] = await BaseDatabase
+    //         .connection(UsersDatabase.TABLE_USERS)
+    //         .where({ id })
 
-        return UsersDB
-    }
+    //     return UsersDB
+    // }
 
-    public async insertUser(newUsersDB: UsersDB) {
-        await BaseDatabase
-            .connection(UsersDatabase.TABLE_USERS)
-            .insert(newUsersDB)
-    }
+    // public async insertUser(newUsersDB: UsersDB) {
+    //     await BaseDatabase
+    //         .connection(UsersDatabase.TABLE_USERS)
+    //         .insert(newUsersDB)
+    // }
 }
