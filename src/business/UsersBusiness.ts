@@ -75,7 +75,7 @@ export class UserBusiness {
         const userDB: UsersDB | undefined = await this.userDatabase.findByEmail(email)
 
         if(!userDB) {
-            throw new NotFoundError("'E-mail' não cadastrado")            
+            throw new NotFoundError("'E-mail' ou 'password' inválidos")            
         }
 
         const users = new Users (
@@ -87,12 +87,11 @@ export class UserBusiness {
             userDB.created_at
         )
 
-        const hashedPassword = users.getPassword()
         const isPasswordCorrect = await this.hashManager
-            .compare(password, hashedPassword)
+            .compare(password, users.getPassword())
         
         if (!isPasswordCorrect) {
-            throw new BadRequestError("'Password' incorreta")
+            throw new BadRequestError("'E=mail' ou 'Password' incorreta")
         }
         
         const payload: TokenPayload = {

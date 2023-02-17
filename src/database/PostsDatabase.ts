@@ -1,39 +1,54 @@
+import { DeletePostsInput } from "../dtos/postsDTO"
+import { PostsCreatorsDB, PostsDB } from "../types"
 import { BaseDatabase } from "./BaseDatabase"
-import { PostsDB } from "../types"
 
-export class PostsDatabase extends BaseDatabase{
-    // public static TABLE_POSTS = "posts"
+export class PostsDatabase extends BaseDatabase {
+    public static TABLE_POSTS = "posts"
+    public static TABLE_LIKES_DISLIKES = "likes_dislikes"
 
-    // public async findUserByName(q: string | undefined) {
-    //     let postsDB
+    public getPostsCreators = async (): Promise <PostsCreatorsDB[]> => {
+        const result: PostsCreatorsDB[] = await BaseDatabase
+            .connection(PostsDatabase.TABLE_POSTS)
+            .select(
+                "posts.id",
+                "posts.creator_id",
+                "posts.content",
+                "posts.likes",
+                "posts.dislikes",
+                "posts.created_at",
+                "posts.updated_at",
+                "users.name AS creator_name"
+            ).join ("users", "posts.creator_id", "=", "users.id")
 
-    //     if (q) {
-    //         const result: PostsDB[] = await BaseDatabase
-    //             .connection(PostsDatabase.TABLE_POSTS)
-    //             .where("name", "LIKE", `%${q}%`)
+        return result
+    }
 
-    //         postsDB = result
-    //     } else {
-    //         const result: PostsDB[] = await BaseDatabase
-    //             .connection(PostsDatabase.TABLE_POSTS)
+    public insert =async (postsDB: PostsDB): Promise <void> => {
+        await BaseDatabase
+            .connection(PostsDatabase.TABLE_POSTS)
+            .insert(postsDB)
+    }
 
-    //         postsDB = result
-    //     }
+    public findById = async (id: string): Promise <PostsDB | undefined> => {
+        const result: PostsDB[] = await BaseDatabase
+        .connection (PostsDatabase.TABLE_POSTS)
+        .select()
+        .where({id}) 
+        
+        return result [0]
+    }
 
-    //     return postsDB
-    // }
+    public update = async (id: string, postsDB: PostsDB): Promise <void> => {
+        await BaseDatabase
+        .connection(PostsDatabase.TABLE_POSTS)
+        .update(postsDB)
+        .where({id})        
+    }
 
-    // public async findUserById(id: string) {
-    //     const [ PostsDB ]: PostsDB[] | undefined[] = await BaseDatabase
-    //         .connection(PostsDatabase.TABLE_POSTS)
-    //         .where({ id })
-
-    //     return PostsDB
-    // }
-
-    // public async insertUser(newPostsDB: PostsDB) {
-    //     await BaseDatabase
-    //         .connection(PostsDatabase.TABLE_POSTS)
-    //         .insert(newPostsDB)
-    // }
+    public delete = async (id: string): Promise <void> => {
+        await BaseDatabase
+        .connection(PostsDatabase.TABLE_POSTS)
+        .delete()
+        .where ({id})        
+    }
 }
