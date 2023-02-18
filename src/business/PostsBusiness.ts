@@ -1,12 +1,12 @@
 import { PostsDatabase } from "../database/PostsDatabase"
-import { CreatePostsInput, DeletePostsInput, EditPostsInput, GetPostsInput, GetPostsOutput } from "../dtos/postsDTO"
+import { CreatePostsInput, DeletePostsInput, EditPostsInput, GetPostsInput, GetPostsOutput, LikeOrDislikeInput } from "../dtos/postsDTO"
 import { BadRequestError } from "../errors/BadRequestError"
 import { ForbbidenError } from "../errors/ForbbidenError"
 import { NotFoundError } from "../errors/NotFoundError"
 import { Posts } from "../models/Posts"
 import { IdGenerator } from "../services/IdGenerator"
 import { TokenManager } from "../services/TokenManager"
-import { PostsCreatorsDB, PostsDB, USER_ROLES } from "../types"
+import { LikesDislikesDB, PostsCreatorsDB, PostsDB, USER_ROLES } from "../types"
 
 export class PostsBusiness {
     constructor(
@@ -95,6 +95,7 @@ export class PostsBusiness {
         await this.postsDatabase.insert(postsDB)
     }
 
+
     public editPost =async (input: EditPostsInput): Promise <void> => {
         const { idToEdit, token, content} = input
 
@@ -147,6 +148,7 @@ export class PostsBusiness {
         await this.postsDatabase.update(idToEdit, updatedPostDB)
     }
 
+
     public deletePost =async (input: DeletePostsInput): Promise <void> => {
         const { idToDelete, token } = input
 
@@ -168,10 +170,45 @@ export class PostsBusiness {
 
         const creatorId = payload.id
 
-        if (postDB.creator_id !== creatorId && payload.role !== USER_ROLES.ADMIN) {
+        if (payload.role !== USER_ROLES.ADMIN && postDB.creator_id !== creatorId) {
             throw new ForbbidenError("Acesso negado. Somente o criador ou admin podem deletar este post")
         }
 
         await this.postsDatabase.delete(idToDelete)
+    }
+
+    public likeOrDislikePost =async (input: LikeOrDislikeInput): Promise <void> => {
+        const { idToLikeOrDislike, token, like } = input
+
+        if (!token){
+            throw new BadRequestError("'Token' ausente")
+        }
+
+        const payload = this.tokenManager.getPayload(token)
+
+        if (payload === null){
+            throw new BadRequestError("'Token' inválido")
+        }
+
+        if(typeof like !== "boolean"){
+            throw new BadRequestError("'Like' deve ser boolean")
+        }
+
+        const postDB = await this.postsDatabase.findById(idToLikeOrDislike)
+
+        if (!postDB) {
+            throw new NotFoundError("'id' não encontrado")
+        }
+
+        const userId = payload.id
+        const likesSended = like ? 1 : 0
+
+        const likesDislikes: LikesDislikesDB = {
+            user_id: userId,
+            post_id: postDB.id,
+            like: likesSended
+        }
+
+        await this.postsDatabase.likesOrDislikesPosts(likesDislikes)
     }
 }

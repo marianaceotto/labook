@@ -72,10 +72,16 @@ export class UserBusiness {
             throw new BadRequestError("'Password' deve ser string")
         }
 
-        const userDB: UsersDB | undefined = await this.userDatabase.findByEmail(email)
+        const userDB = await this.userDatabase.findByEmail(email)
 
         if(!userDB) {
             throw new NotFoundError("'E-mail' ou 'password' inválidos")            
+        }
+
+        const isPasswordCorrect = await this.hashManager.compare(password, userDB.password)
+        
+        if (!isPasswordCorrect){
+            throw new NotFoundError("'E-mail' ou 'password' incorretos")
         }
 
         const users = new Users (
@@ -87,12 +93,6 @@ export class UserBusiness {
             userDB.created_at
         )
 
-        const isPasswordCorrect = await this.hashManager
-            .compare(password, users.getPassword())
-        
-        if (!isPasswordCorrect) {
-            throw new BadRequestError("'E=mail' ou 'Password' incorreta")
-        }
         
         const payload: TokenPayload = {
             id: users.getId(),
@@ -109,3 +109,4 @@ export class UserBusiness {
         return output
     }
 }
+

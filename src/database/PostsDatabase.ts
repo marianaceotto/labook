@@ -1,5 +1,5 @@
 import { DeletePostsInput } from "../dtos/postsDTO"
-import { PostsCreatorsDB, PostsDB } from "../types"
+import { LikesDislikesDB, PostsCreatorsDB, PostsDB } from "../types"
 import { BaseDatabase } from "./BaseDatabase"
 
 export class PostsDatabase extends BaseDatabase {
@@ -50,5 +50,11 @@ export class PostsDatabase extends BaseDatabase {
         .connection(PostsDatabase.TABLE_POSTS)
         .delete()
         .where ({id})        
+    }
+
+    public likesOrDislikesPosts =async (likesDislikes: LikesDislikesDB): Promise <void>  => {
+        await BaseDatabase
+        .connection(PostsDatabase.TABLE_LIKES_DISLIKES)
+        .insert(likesDislikes)
     }
 }
