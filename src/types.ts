@@ -62,3 +62,4 @@ export interface LikesDislikesDB {
 export interface PostsCreatorsDB extends PostsDB {
     creator_name: string
 }
+
