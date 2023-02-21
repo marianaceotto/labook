@@ -6,7 +6,7 @@ import { NotFoundError } from "../errors/NotFoundError"
 import { Posts } from "../models/Posts"
 import { IdGenerator } from "../services/IdGenerator"
 import { TokenManager } from "../services/TokenManager"
-import { LikesDislikesDB, PostsCreatorsDB, PostsDB, USER_ROLES } from "../types"
+import { LikesDislikesDB, PostsCreatorsDB, PostsDB, POSTS_LIKE, USER_ROLES } from "../types"
 
 export class PostsBusiness {
     constructor(
@@ -194,9 +194,9 @@ export class PostsBusiness {
             throw new BadRequestError("'Like' deve ser boolean")
         }
 
-        const postDB = await this.postsDatabase.findById(idToLikeOrDislike)
+        const postsCreatorsDB = await this.postsDatabase.findPostsCreatorsById(idToLikeOrDislike)
 
-        if (!postDB) {
+        if (!postsCreatorsDB) {
             throw new NotFoundError("'id' não encontrado")
         }
 
@@ -205,10 +205,49 @@ export class PostsBusiness {
 
         const likesDislikes: LikesDislikesDB = {
             user_id: userId,
-            post_id: postDB.id,
+            post_id: postsCreatorsDB.id,
             like: likesSended
         }
 
-        await this.postsDatabase.likesOrDislikesPosts(likesDislikes)
+        const posts = new Posts(
+            postsCreatorsDB.id,
+            postsCreatorsDB.content,
+            postsCreatorsDB.likes,
+            postsCreatorsDB.dislikes,
+            postsCreatorsDB.created_at,
+            postsCreatorsDB.updated_at,
+            postsCreatorsDB.creator_id,
+            postsCreatorsDB.creator_name
+        )
+
+        const likeDislikeExists = await this.postsDatabase.findLikesDislikes(likesDislikes)
+
+        if(likeDislikeExists === POSTS_LIKE.ALREADY_LIKED){
+            if (like) {             
+                await this.postsDatabase.removeLikeDislike(likesDislikes)
+                posts.removeLike()
+            } else {
+                await this.postsDatabase.updateLikeDislike(likesDislikes)
+                posts.removeLike()
+                posts.addDislike()
+            }
+
+        } else if (likeDislikeExists === POSTS_LIKE.ALREADY_DISLIKED) {
+            if (like) {             
+                await this.postsDatabase.updateLikeDislike(likesDislikes)
+                posts.removeDislike()
+                posts.addLike()
+            } else {
+                await this.postsDatabase.removeLikeDislike(likesDislikes)
+                posts.removeDislike()
+            }
+
+        } else {
+            await this.postsDatabase.likesOrDislikesPosts(likesDislikes)
+            like ? posts.addLike() : posts.addDislike()
+        }
+
+        const updatedPost = posts.toDBModel()
+        await this.postsDatabase.update(idToLikeOrDislike, updatedPost)
     }
 }
