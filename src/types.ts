@@ -63,3 +63,8 @@ export interface PostsCreatorsDB extends PostsDB {
     creator_name: string
 }
 
+export enum POSTS_LIKE{
+    ALREADY_LIKED = "ALREADY LIKED",
+    ALREADY_DISLIKED = "ALREADY DISLIKED"
+}
+
