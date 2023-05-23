@@ -7,9 +7,6 @@ Ela permite que os usuários visualizem os posts, além de cria-los, editá-los 
 
 ## 📄 Documentação
 
-https://documenter.getpostman.com/view/24471704/2s93CLrCsW
-
-
 ![projeto-labook (2)](https://user-images.githubusercontent.com/29845719/216036534-2b3dfb48-7782-411a-bffd-36245b78594e.png)
 
 ### Endpoints
@@ -30,5 +27,7 @@ https://documenter.getpostman.com/view/24471704/2s93CLrCsW
 
 
 ## 📫 Contato
+
 E-mail: marianaceott@gmail.com
+
 [![LinkedIn](https://img.shields.io/badge/LinkedIn-0077B5?style=for-the-badge&logo=linkedin&logoColor=white)](https://www.linkedin.com/in/mariana-ceotto)
