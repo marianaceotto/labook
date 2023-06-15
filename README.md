@@ -1,9 +1,6 @@
 # LABOOK
 
-Labook é uma rede social com o objetivo de promover a conexão e interação entre pessoas. Quem se cadastrar no aplicativo poderá criar e curtir publicações.
-
-Essa API possibilita o cadastramento de uma nova conta e seu respectivo login. 
-Ela permite que os usuários visualizem os posts, além de cria-los, editá-los e exclui-los, podendo ainda curtir e descurtir publicações.
+Criação de uma API reproduzindo uma rede social. Possibilita o cadastramento de conta e seu respectivo login, permite que os usuários visualizem os posts, além de cria-los, editá-los e exclui-los, podendo curtir e descurtir publicações. 
 
 ## 📄 Documentação
 
